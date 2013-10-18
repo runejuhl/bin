@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+'''Create a QR code from clipboard contents.'''
 
 import qrencode
 import sys

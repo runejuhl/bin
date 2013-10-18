@@ -1,13 +1,26 @@
 #!/usr/bin/env bash
 set -e
 
+function help() {
+    cat <<EOF
+Edit files in place. Useful for changing strings in binaries on block
+devices (my original use case).
+Searches for 'search_string' and uses dd to copy 'replacement_string'
+to specified position. Make sure string lengths are equal (often you
+can either pad with spaces or use a terminating NUL character).
+
+usage:
+  `basename ${0}` search_string replacement_string device_or_file
+EOF
+}
+
 KEY=$1
 NEWKEY=$2
 DEV=$3
 
-for i in "${DEV}" "${KEY}" "${NEWKEY}"; do
-    if [[ -z ${i} ]]; then
-        echo "Missing argument."
+if [[ ${#} != 3 ]]; then
+        printf "ERROR: Wrong number of arguments.\n\n"
+        help
         exit -2
     fi
 done
