@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+
+import pygame
+import pygame.camera
+import time
+
+size = (640,480)
+
+pygame.init()
+screen = pygame.display.set_mode(size) 
+c = pygame.time.Clock() # create a clock object for timing
+
+# initialize camera
+pygame.camera.init()
+cams = pygame.camera.list_cameras()
+cam = pygame.camera.Camera(cams[0], size)
+cam.start()
+
+while True:
+    img = cam.get_image()
+    screen.blit(img,(0,0))
+    pygame.display.flip() # update the display
+    # c.tick(3) # only three images per second
+
+    

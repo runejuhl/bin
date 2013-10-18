@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -e
+
+KEY=$1
+NEWKEY=$2
+DEV=$3
+
+for i in "${DEV}" "${KEY}" "${NEWKEY}"; do
+    if [[ -z ${i} ]]; then
+        echo "Missing argument."
+        exit -2
+    fi
+done
+
+# make sure that new len(newkey) == len(key)
+if [[ ${#KEY} -ne ${#NEWKEY} ]]; then
+    echo "Please use equal key lengths"
+    exit -1
+fi
+
+PLACES=`grep --color=never -aob ${KEY} ${DEV}| sed -r 's/([0-9]+):.*/\1/g'`
+
+for i in ${PLACES}; do
+    dd of=${DEV} obs=1 seek=${i} <<< "${NEWKEY}"
+done

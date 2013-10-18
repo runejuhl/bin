@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+
+import qrencode
+import sys
+import gtk
+
+text = ''
+try:
+    text = sys.argv[1]
+except:
+    text = gtk.Clipboard(selection='PRIMARY').wait_for_text()
+
+(version, size, image) = qrencode.encode_scaled(text, 255, 2)
+image.show()
+
