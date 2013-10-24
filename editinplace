@@ -19,11 +19,10 @@ NEWKEY=$2
 DEV=$3
 
 if [[ ${#} != 3 ]]; then
-        printf "ERROR: Wrong number of arguments.\n\n"
-        help
-        exit -2
-    fi
-done
+    printf "ERROR: Wrong number of arguments.\n\n"
+    help
+    exit -2
+fi
 
 # make sure that new len(newkey) == len(key)
 if [[ ${#KEY} -ne ${#NEWKEY} ]]; then
