@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+'''
+Change file location for all torrent in a Deluge state file. Run
+without arguments to see help. Deluge probably shouldn't be running
+while using this.
+
+Written for Deluge 1.3.3, but should be usable with any version of
+Deluge that features the same state file structure.
+'''
+
+import sys, pickle
+
+__author__  = 'Rune Juhl Jacobsen'
+__email__   = 'runejuhl@petardo.dk'
+__license__ = 'WTFPL'
+
+if len(sys.argv) != 3:
+    print('Usage: {} FROM-PATH TO-PATH'.format(sys.argv[0]))
+    sys.exit(-1)
+
+print('Changing from "{}" to "{}".'.format(sys.argv[1], sys.argv[2]))
+
+from_path = sys.argv[1]
+to_path   = sys.argv[2]
+
+try:
+    with open('torrents.state', 'r') as ts:
+        state = pickle.load(ts)
+        
+    for t in state.torrents:
+        if t.save_path.startswith(from_path):
+            if t.is_finished:
+                t.save_path = t.save_path.replace(from_path, to_path)
+                print('Changed file contents of torrent {}.'.format(t.filename))
+
+    with open('torrents.state', 'wb') as ts:
+        pickle.dump(state, ts)
+
+except IOError as e:
+    print('{}. You need to change directory to the folder that contains the Deluge state file, e.g. ~/.config/deluge/state/'.format(e))
