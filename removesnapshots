@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+from datetime import datetime, timedelta
+import time
+import subprocess
+
+VOLNAME = 'tank'
+
+def filtersnapshots(l, delta=timedelta(days=30)):
+    snapshots = []
+    for i in l:
+        if not i.startswith(VOLNAME +'@'):
+            continue
+
+        i = i.split()
+        i = i[0]
+        i = i.split('@')
+        i = int(i[1])
+
+        cutoff = int(time.mktime((datetime.now() - delta).timetuple()))
+
+        if i < cutoff:
+            snapshots.append(str(i))
+
+    return ','.join(snapshots)
+
+if __name__ == '__main__':
+    with open('snapshots.list', 'r') as f:
+        snapshotlist = filtersnapshots(f.readlines(), timedelta(days=60))
+
+    try:
+        output = subprocess.check_output(['zfs', 'destroy', '-n', '-v', VOLNAME + '@' + snapshotlist])
+    except subprocess.CalledProcessError as e:
+        print e.returncode, e.cmd, e.output
+    except OSError as e:
+        print 'Missing ZFS binary, most likely...'
