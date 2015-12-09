@@ -1,0 +1,18 @@
+#!/bin/bash
+# Utility to push to remote git repo. Removes compiled files, changes to another
+# repo to allow push and changes back to master afterwards. Requires a remote
+# repo "bare".
+
+args=${@}
+
+# Split words at spaces
+IFS=' '
+
+# Set the path to the remote git repo. Extract the server URL and the repo path
+set $(git config --local --get remote.origin.url | sed -r 's#.*?://(.*?):(.*?)$#\1 \2#')
+repo=${1}
+path=${2}
+
+ssh ${repo} "cd ${path} && git checkout master~"
+git ${args}
+ssh ${repo} "cd ${path} && git checkout master"

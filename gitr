@@ -1,0 +1,10 @@
+#!/bin/bash
+# Utility to use remote repo directly using SSH
+
+cmd=${@}
+IFS=' '
+set $(git config --local --get remote.origin.url | sed -r 's#.*?://(.*?):(.*?)$#\1 \2#')
+repo=$1
+path=$2
+
+ssh ${repo} "cd ${path} && git ${cmd}"
