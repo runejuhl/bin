@@ -3,6 +3,11 @@ bin
 
 This repository contains a few utilities I've created.
 
+## batterywarning.sh ##
+
+Bash script to flash the power button LED on Thinkpads if the battery level gets
+below a certain level.
+
 ## editinplace ##
 
 Editing of files in-place, including block devices.
