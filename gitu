@@ -3,13 +3,16 @@
 # repo to allow push and changes back to master afterwards. Requires a remote
 # repo "bare".
 
-args=${@}
-
 # Split words at spaces
 IFS=' '
 
+args=${@}
+set ${args}
+remote=${2:-origin}
+
+
 # Set the path to the remote git repo. Extract the server URL and the repo path
-set $(git config --local --get remote.origin.url | sed -r 's#.*?://(.*?):(.*?)$#\1 \2#')
+set $(git config --local --get remote.${remote}.url | sed -r 's#.*?://(.*?):(.*?)$#\1 \2#')
 repo=${1}
 path=${2}
 
