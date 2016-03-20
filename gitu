@@ -14,5 +14,6 @@ repo=${1}
 path=${2}
 
 ssh ${repo} "cd ${path} && git checkout master~"
+cur_branch=$(ssh ${repo} "cd ${path} && git rev-parse --abbrev-ref HEAD")
 git ${args}
-ssh ${repo} "cd ${path} && git checkout master"
+ssh ${repo} "cd ${path} && git checkout ${cur_branch}"
