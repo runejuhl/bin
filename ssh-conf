@@ -1,0 +1,4 @@
+#!/bin/bash
+# Compile config.d-type ssh configs into one config
+
+cat $(find ~/.ssh/config.d/ -not -type d -regex '.+\.conf$' -print | sort | tr '\n' ' ') > ~/.ssh/config
