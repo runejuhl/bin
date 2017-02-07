@@ -1,0 +1,6 @@
+#!/bin/sh
+shuf -n4 /usr/share/dict/words |
+    tr '\n' ' ' |               # replace newlines with spaces
+    sed -r "s/'//g" |           # remove quotes, they're bothersome
+    sed -r 's/ $//'             # remove trailing space
+echo
