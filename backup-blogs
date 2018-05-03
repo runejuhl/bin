@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd ~/backup
+
+ssh bucaramanga lxc exec lifesabroad 'mysqldump wordpress' > "lifesabroad/lifesabroad-$(date +%F-%T).sql"
+ssh bucaramanga lxc exec ibrejser 'mysqldump wordpress' > "ibrejser/ibrejser-$(date +%F-%T).sql"
+ssh bucaramanga lxc exec wizardking 'mysqldump wordpress' > "wizardking/wizardking-$(date +%F-%T).sql"
+# rsync -Pa bucaramanga

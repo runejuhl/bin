@@ -1,0 +1,23 @@
+#!/bin/bash
+
+chrome=${chrome:-chromium}
+PROFILE_BASE="$HOME/.chrome/profile"
+
+if [[ $# -eq 1 ]]; then
+  declare -r \
+          PROFILE="$1" \
+          PROFILE_PATH="$PROFILE_BASE/$1"
+
+  if [[ $PROFILE == t ]]; then
+    rsync -Pa --delete "$PROFILE_BASE/.temp-profile/" "$PROFILE_PATH"
+  fi
+
+  mkdir -p $PROFILE_PATH
+  eval "$chrome" --user-data-dir="$PROFILE_PATH"
+
+  if [[ $PROFILE == t ]]; then
+    rm -rf "$PROFILE_PATH"
+  fi
+else
+  exec "$chrome"
+fi

@@ -1,0 +1,10 @@
+#!/bin/sh
+if [ ! -z $1 ]; then
+    setxkbmap us -variant altgr-intl -option
+    echo "Hit enter when you're done hitting caps lock"
+    read TMP
+fi
+
+setxkbmap us -variant altgr-intl -option ctrl:nocaps
+xmodmap ~/.Xmodmap
+# xcape -e 'Caps_Lock=Escape'

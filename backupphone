@@ -1,0 +1,23 @@
+#!/bin/bash
+
+cd ~/backup/opo/
+backupdir=$(date +%F)
+
+if [ -a "$backupdir" ]; then
+    echo 'Backup exists'
+    exit 1
+fi
+
+mkdir "${backupdir}"
+cd "${backupdir}"
+
+mkdir oandbackups recordedCalls SoundRecorder
+
+cd oandbackups
+sudo adb pull /sdcard/oandbackups/ .
+
+cd ../recordedCalls
+sudo adb pull /sdcard/recordedCalls .
+
+cd ../SoundRecorder
+sudo adb pull /sdcard/SoundRecorder .

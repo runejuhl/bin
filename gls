@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
+PACKAGE_ID=$1
+
+curl --silent "https://gls-group.eu/app/service/open/rest/DK/da/rstt001?match=${PACKAGE_ID}&caller=witt002&milis=$(date +%s)00" -H 'Host: gls-group.eu' -H 'User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36' -H 'Accept: */*' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Content-Type: application/json' -H 'X-Requested-With: XMLHttpRequest' -H "Referer: https://gls-group.eu/DK/da/find-pakke?match=${PACKAGE_ID}" | jq .

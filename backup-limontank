@@ -1,0 +1,29 @@
+#!/bin/bash
+# Borg backup wrapper
+#
+# Remember to limit ssh:
+# `command="borg serve --restrict-to-path /vol0/backup/rune/bolivar",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc`
+
+set -euo pipefail
+
+[[ $HOSTNAME == 'bolivar' ]] || (logger -s -p user.err 'not running backup script from bolivar; exiting'; exit 1)
+
+COMMAND=${1:-backup}
+REPO='rune@atat.enableit.dk:/vol0/backup/rune/bolivar'
+NAME='::limontank-data-{now:%Y-%m-%dT%H:%M:%S}'
+
+BORG_PASSPHRASE="$(cat ~/.borg_passphrase)"
+export BORG_PASSPHRASE
+
+case $COMMAND in
+    backup)
+        borg create -v -s -p -C lz4 "${REPO}${NAME}" /limontank/data
+        borg prune -v --list --keep-within=10d --keep-weekly=4 --keep-monthly=6 "${REPO}"
+        ;;
+    init)
+        borg init ${REPO}
+        ;;
+    *)
+        logger -s -p user.err "unknown command '${COMMAND}'; exiting"
+        exit 2
+esac

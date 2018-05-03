@@ -1,0 +1,19 @@
+#!/bin/bash
+
+while true; do
+
+  inotifywait --recursive          \
+            --event modify         \
+            --event delete         \
+            --exclude '^\./\.git/' \
+            --exclude '^\.$' \
+            --quiet \
+            .
+
+            # --event create         \
+            # --exclude '(.+?/)?\.#.+' \
+            # --exclude '(.+?/)?.#.+' \
+
+  eval "$@"
+
+done

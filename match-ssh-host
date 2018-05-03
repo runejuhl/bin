@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -euo pipefail
+host=$1
+shift
+
+declare -A args
+
+while [[ $# -gt 0 ]]; do
+  k=$1
+  v=$2
+  shift 2
+  if [[ ! "$k" =~ ^--([^ ]+) ]]; then
+    >&2 echo fail
+    continue
+  fi
+
+  declare args["${BASH_REMATCH[1]}"]=$v
+done
+
+if [[ -n "${args[remote-hostname]}" ]]; then
+  re="^${host}\."
+  if [[ "${args[remote-hostname]}" =~ $re ]]; then
+    echo "Matched hostname against /${re}/"
+    exit 0
+  fi
+fi
+
+
+exit 1
